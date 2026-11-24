@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <title>Sprawdzacz PEP 8 — Klimat UMG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-title">SPRAWDZACZ KODU PYTHON — PEP 8</div>
+    </header>
+
+    <main class="panel">
+        <h1>Sprawdzacz zgodności z PEP 8</h1>
+        <p class="lead">Wklej kod w Pythonie, aby sprawdzić styl, zobaczyć podział na błędy i ostrzeżenia oraz szybko przeskoczyć do konkretnego miejsca.</p>
+
+        <form method="post">
+            <div class="editor-wrapper">
+                <div id="lineNumbers" class="line-numbers">1</div>
+                <textarea id="codeArea" name="code" placeholder="Wklej tutaj kod Pythona...">{{ code }}</textarea>
+            </div>
+            <div class="status-bar">
+                <span id="cursorPos">Linia: 1, Kolumna: 1</span>
+                <span id="lineCount">Liczba linii: 1</span>
+                <span id="charCount">Znaków: 0 / 50000</span>
+            </div>
+            <div class="actions">
+                <button type="submit">Sprawdź PEP 8</button>
+                <button type="button" id="clearBtn">Wyczyść</button>
+            </div>
+        </form>
+
+        <div id="resultsContainer">
+            {% if checked %}
+                {% if empty_input %}
+                    <div class="info-box">
+                        <strong>Brak kodu do sprawdzenia.</strong> Wklej najpierw fragment kodu w Pythonie do edytora powyżej.
+                    </div>
+                {% elif errors %}
+                    <h2>Znalezione uwagi ({{ errors|length }}):</h2>
+                    <div class="summary-bar">
+                        <strong>Błędy:</strong> {{ error_count }} |
+                        <strong>Ostrzeżenia:</strong> {{ warning_count }}
+                    </div>
+                    <p><small>Kliknij uwagę, aby ustawić kursor na wskazanej linii i kolumnie.</small></p>
+                    {% for err in errors %}
+                        <div class="{{ 'warning-box' if err.severity == 'warning' else 'error-box' }}"
+                             onclick="jumpTo({{ err.line }}, {{ err.column }})">
+                            <strong>
+                                {{ 'Ostrzeżenie' if err.severity == 'warning' else 'Błąd' }} —
+                                Linia {{ err.line }}, kol. {{ err.column }} [{{ err.code }}]
+                            </strong> — {{ err.message }}<br>
+                            <strong>Czemu:</strong> {{ err.why }}<br>
+                            <strong>Jak poprawić:</strong> {{ err.fix }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="ok-box">
+                        <strong>Pełny kurs!</strong> Brak wykrytych uwag PEP 8 w tym fragmencie kodu.
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
