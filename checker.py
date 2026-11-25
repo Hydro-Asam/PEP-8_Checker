@@ -9,6 +9,11 @@ def _get_severity(code: str) -> str:
         return "warning"
     return "error"
 
+def _get_doc_url(code: str) -> str:
+    """Buduje link do strony Flake8 Rules dla kodów błędów i ostrzeżeń."""
+    if code.startswith(("E", "W")) and len(code) == 4 and code[1:].isdigit():
+        return f"https://www.flake8rules.com/rules/{code}.html"
+    return "https://www.flake8rules.com/"
 
 class ListReport(pycodestyle.BaseReport):
     """Własny raport, który zamiast wypisywać na ekran, zbiera błędy do listy."""
@@ -29,6 +34,7 @@ class ListReport(pycodestyle.BaseReport):
                 "message": text,
                 "why": advice["why"],
                 "fix": advice["fix"],
+                "doc_url": _get_doc_url(code),
             })
         return code
 
@@ -62,3 +68,5 @@ if __name__ == "__main__":
         )
         print(f"   Czemu: {err['why']}")
         print(f"   Jak poprawić: {err['fix']}")
+
+

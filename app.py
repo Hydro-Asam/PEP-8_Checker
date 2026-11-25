@@ -33,8 +33,8 @@ def index():
                 ),
                 "fix": (
                     "Wklej krótszy fragment kodu "
-                    "(np. pojedynczy plik lub funkcję)."
                 ),
+                "doc_url": "https://peps.python.org/pep-0008/",
             }]
         else:
             errors = check_pep8(code)

@@ -12,8 +12,11 @@
 
     <main class="panel">
         <h1>Sprawdzacz zgodności z PEP 8</h1>
-        <p class="lead">Wklej kod w Pythonie, aby sprawdzić styl, zobaczyć podział na błędy i ostrzeżenia oraz szybko przeskoczyć do konkretnego miejsca.</p>
-
+        <p class="lead">Wklej kod w Pythonie, aby sprawdzić styl, zobaczyć podział na błędy i ostrzeżenia oraz szybko przeskoczyć do konkretnego miejsca.
+	<a class="doc-link" href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener noreferrer">
+      	  Oficjalny przewodnik PEP 8 ↗
+    		</a>
+	</p>
         <form method="post">
             <div class="editor-wrapper">
                 <div id="lineNumbers" class="line-numbers">1</div>
@@ -44,16 +47,27 @@
                     </div>
                     <p><small>Kliknij uwagę, aby ustawić kursor na wskazanej linii i kolumnie.</small></p>
                     {% for err in errors %}
-                        <div class="{{ 'warning-box' if err.severity == 'warning' else 'error-box' }}"
-                             onclick="jumpTo({{ err.line }}, {{ err.column }})">
-                            <strong>
-                                {{ 'Ostrzeżenie' if err.severity == 'warning' else 'Błąd' }} —
-                                Linia {{ err.line }}, kol. {{ err.column }} [{{ err.code }}]
-                            </strong> — {{ err.message }}<br>
-                            <strong>Czemu:</strong> {{ err.why }}<br>
-                            <strong>Jak poprawić:</strong> {{ err.fix }}
-                        </div>
-                    {% endfor %}
+		    <div class="{{ 'warning-box' if err.severity == 'warning' else 'error-box' }}"
+				 onclick="jumpTo({{ err.line }}, {{ err.column }})">
+				<strong>
+				    {{ 'Ostrzeżenie' if err.severity == 'warning' else 'Błąd' }} —
+				    Linia {{ err.line }}, kol. {{ err.column }} [{{ err.code }}]
+				</strong> — {{ err.message }}<br>
+				<strong>Czemu:</strong> {{ err.why }}<br>
+				<strong>Jak poprawić:</strong> {{ err.fix }}
+				{% if err.doc_url %}
+				    <div class="err-doc">
+					<a class="doc-link"
+					   href="{{ err.doc_url }}"
+					   target="_blank"
+					   rel="noopener noreferrer"
+					   onclick="event.stopPropagation()">
+					    Szczegóły reguły {{ err.code }} (Flake8 Rules) ↗
+					</a>
+				    </div>
+				{% endif %}
+			    </div>
+			{% endfor %}
                 {% else %}
                     <div class="ok-box">
                         <strong>Pełny kurs!</strong> Brak wykrytych uwag PEP 8 w tym fragmencie kodu.
@@ -62,7 +76,9 @@
             {% endif %}
         </div>
     </main>
-
+    <script>
+        window.pep8Errors = {{ errors|tojson }};
+    </script>
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

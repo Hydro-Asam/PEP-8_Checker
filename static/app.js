@@ -17,6 +17,29 @@ function updateCharCount() {
     charCount.textContent = "Znaków: " + currentLength + " / " + maxChars;
 }
 
+const pep8Errors = Array.isArray(window.pep8Errors) ? window.pep8Errors : [];
+
+function getLineSeverityMap(errorsList) {
+    const map = {};
+
+    for (const err of errorsList) {
+        const line = Number(err.line);
+        if (!line || line < 1) {
+            continue;
+        }
+
+        if (err.severity === "warning") {
+            if (!map[line]) {
+                map[line] = "warning";
+            }
+        } else {
+            map[line] = "error";
+        }
+    }
+
+    return map;
+}
+
 function updateLineNumbers() {
     if (!textarea || !lineNumbers || !lineCount) {
         return;
@@ -24,13 +47,24 @@ function updateLineNumbers() {
 
     const lines = textarea.value.split("\n");
     const total = lines.length;
-    let numbersHtml = "";
+    const severityByLine = getLineSeverityMap(pep8Errors);
+
+    lineNumbers.innerHTML = "";
 
     for (let i = 1; i <= total; i++) {
-        numbersHtml += i + (i < total ? "\n" : "");
+        const span = document.createElement("span");
+        span.textContent = String(i);
+        span.className = "line-num-item";
+
+        if (severityByLine[i] === "error") {
+            span.classList.add("line-num-error");
+        } else if (severityByLine[i] === "warning") {
+            span.classList.add("line-num-warning");
+        }
+
+        lineNumbers.appendChild(span);
     }
 
-    lineNumbers.textContent = numbersHtml;
     lineCount.textContent = "Liczba linii: " + total;
     lineNumbers.scrollTop = textarea.scrollTop;
 }
@@ -75,6 +109,7 @@ function clearEditor() {
         return;
     }
 
+    pep8Errors.length = 0;
     textarea.value = "";
     textarea.focus();
     updateLineNumbers();

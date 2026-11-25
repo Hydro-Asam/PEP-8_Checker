@@ -204,3 +204,37 @@ button[type="submit"]:hover {
     margin-top: 18px;
     color: var(--navy-dark);
 }
+
+.doc-link {
+    color: var(--navy-mid);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold-accent);
+}
+
+.doc-link:hover {
+    color: var(--navy-dark);
+    border-bottom-width: 2px;
+}
+
+.err-doc {
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+.line-num-item {
+    display: block;
+    padding: 0 8px 0 4px;
+}
+
+.line-num-error {
+    background: #fadbd8;
+    color: #922b21;
+    font-weight: 700;
+}
+
+.line-num-warning {
+    background: #fcf3cf;
+    color: #7d6608;
+    font-weight: 700;
+}
