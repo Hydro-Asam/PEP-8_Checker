@@ -5,13 +5,13 @@ Funkcje: Edytor z numerowaniem linii, liczniki błędów/ostrzeżeń i znaków, 
 
 Uruchomienie lokalnie(terminal linux):
 
-Utwórz środowisko poleceniem python3 -m venv .venv 
+Utwórz środowisko poleceniem: python3 -m venv .venv 
 
-Włącz środowisko source .venv/bin/activate 
+Włącz środowisko source: .venv/bin/activate 
 
-Przy aktywnym (.venv) wpisz pip install -r requirements.txt 
+Przy aktywnym (.venv) wpisz: pip install -r requirements.txt 
 
-Wpisz python app.py (lub python3 app.py, jeśli skrót python nie jest podpięty) 
+Wpisz: python app.py (lub python3 app.py, jeśli skrót python nie jest podpięty) 
 
 wejdź na http://127.0.0.1:5000
 
