@@ -52,6 +52,5 @@ def index():
         warning_count=warning_count,
     )
 
-
 if __name__ == "__main__":
     app.run(debug=True)
